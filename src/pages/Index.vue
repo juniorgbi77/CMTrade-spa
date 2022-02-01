@@ -11,12 +11,12 @@
         </div>
         <div class="col-12 embed-container">
           <iframe
-          :src="youtubeLink"
-          title="YouTube video"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
+            :src="youtubeLink"
+            title="YouTube video"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
         </div>
         <div class="col-12 q-mb-sm">
           <q-separator />
@@ -76,10 +76,17 @@
         </div>
 
         <div class="col-12 q-mb-sm">
+          <IndicatorsDropdown
+            :amount="indicatorsAmount"
+            @model="updateModelIndicators"
+          />
+        </div>
+
+        <div class="col-12 q-mb-sm">
           <q-separator />
         </div>
         <div class="col-12 q-mb-sm">
-          <Indicators :amount="indicatorsAmount" @model="updateModel" />
+          <Parameters @model="updateModelParameters" />
         </div>
         <div class="col-4 offset-4 q-my-sm self-center">
           <q-btn
@@ -96,12 +103,14 @@
 
 <script>
 import { ref } from "vue";
-import Indicators from "../components/indicators.vue";
+import Parameters from "../components/parameters.vue";
+import IndicatorsDropdown from "../components/indicatorsDropdown.vue";
 import request from "../api/request.js";
 
 export default {
   components: {
-    Indicators,
+    Parameters,
+    IndicatorsDropdown,
   },
   setup() {
     const nameRef = ref(null);
@@ -124,6 +133,9 @@ export default {
 
       indicators: [],
       indicatorsAmount: ref(1),
+
+      parameters: [],
+
       submit() {
         nameRef.value.validate();
         emailRef.value.validate();
@@ -145,7 +157,6 @@ export default {
             .form(data)
             .then((result) => {
               // handle success
-              
             })
             .catch(function (error) {
               // handle error
@@ -155,9 +166,18 @@ export default {
       },
     };
   },
+  watch: {
+    indicatorsAmount() {
+      this.indicators = [];
+    },
+  },
   methods: {
-    updateModel(val) {
+    updateModelIndicators(val) {
       this.indicators = val;
+      console.log(this.indicators);
+    },
+    updateModelParameters(val) {
+      this.parameters = val;
     },
     isValidEmail(val) {
       const emailPattern =
