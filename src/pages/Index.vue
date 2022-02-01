@@ -106,6 +106,7 @@ import { ref } from "vue";
 import Parameters from "../components/parameters.vue";
 import IndicatorsDropdown from "../components/indicatorsDropdown.vue";
 import request from "../api/request.js";
+import { useQuasar } from "quasar";
 
 export default {
   components: {
@@ -113,6 +114,8 @@ export default {
     IndicatorsDropdown,
   },
   setup() {
+    const $q = useQuasar();
+
     const nameRef = ref(null);
     const emailRef = ref(null);
     const phoneRef = ref(null);
@@ -152,7 +155,7 @@ export default {
             phone: this.phone,
             indicatorsAmount: this.indicatorsAmount,
             indicators: this.indicators,
-            parameters: this.parameters
+            parameters: this.parameters,
           };
           request
             .form(data)
@@ -163,6 +166,13 @@ export default {
               // handle error
               console.log(error);
             });
+        } else {
+          $q.notify({
+            color: "red",
+            icon: "close",
+            message: "Necessario preencher todos os campos!",
+            timeout: 3000,
+          });
         }
       },
     };
@@ -175,7 +185,6 @@ export default {
   methods: {
     updateModelIndicators(val) {
       this.indicators = val;
-      console.log(this.indicators);
     },
     updateModelParameters(val) {
       this.parameters = val;
