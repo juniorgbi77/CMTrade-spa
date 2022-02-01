@@ -152,6 +152,7 @@ export default {
             phone: this.phone,
             indicatorsAmount: this.indicatorsAmount,
             indicators: this.indicators,
+            parameters: this.parameters
           };
           request
             .form(data)
